@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #F0F2F5;
+    color: #111827;
+    font-family: 'DM Sans', sans-serif;
+  }
+}
+
+/* Skeleton loader shimmer animation sweep */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+/* Breach map marker CSS pulse animation */
+@keyframes breach-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(220, 38, 38, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+  }
+}
+
+.marker-breach-pulse {
+  border-radius: 50%;
+  animation: breach-pulse 1.8s infinite;
+}
+
+/* Custom leaflet map popup styling */
+.leaflet-popup-content-wrapper {
+  background: #0D1B2A !important;
+  color: #FFFFFF !important;
+  border-radius: 8px !important;
+  padding: 4px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+}
+
+.leaflet-popup-tip {
+  background: #0D1B2A !important;
+}
