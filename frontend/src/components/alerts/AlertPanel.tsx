@@ -28,26 +28,36 @@ export const AlertPanel: React.FC<AlertPanelProps> = ({ alerts }) => {
     return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
   });
 
+  const unackCount = alerts.filter((a) => a.acknowledged === 0).length;
+
   return (
-    <div className="bg-white border border-gray-200 rounded-[8px] overflow-hidden shadow-card flex flex-col h-[480px]">
+    <div className="bg-white border border-gray-200/60 rounded-xl overflow-hidden shadow-card flex flex-col h-[480px]">
       {/* Panel Header */}
-      <div className="p-4 border-b border-gray-200 flex items-center justify-between bg-slate-50">
+      <div className="px-4 py-3.5 border-b border-gray-100 flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <BellRinging size={18} className="text-[#1D6FA4]" />
+          <div className="w-7 h-7 rounded-lg bg-[#1D6FA4]/10 flex items-center justify-center">
+            <BellRinging size={16} weight="fill" className="text-[#1D6FA4]" />
+          </div>
           <h2 className="text-sm font-bold text-gray-900 tracking-tight">Active Excursion Alerts</h2>
         </div>
-        <span className="text-xs font-mono font-bold bg-[#1D6FA4] text-white px-2 py-0.5 rounded-[4px]">
-          {alerts.filter((a) => a.acknowledged === 0).length} UNACKNOWLEDGED
+        <span className={`text-[10px] font-mono font-bold px-2.5 py-1 rounded-md ${
+          unackCount > 0
+            ? 'bg-red-50 text-red-600 border border-red-200/60'
+            : 'bg-emerald-50 text-emerald-600 border border-emerald-200/60'
+        }`}>
+          {unackCount} UNACKNOWLEDGED
         </span>
       </div>
 
-      {/* Internal Scrollable Content (Max height 480px) */}
-      <div className="p-3 space-y-2.5 overflow-y-auto flex-1 bg-slate-50/50">
+      {/* Internal Scrollable Content */}
+      <div className="p-3 space-y-2 overflow-y-auto flex-1">
         {sortedAlerts.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center p-6 text-gray-400 space-y-2">
-            <CheckCircle size={32} className="text-emerald-500" />
+            <div className="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center">
+              <CheckCircle size={28} weight="fill" className="text-emerald-500" />
+            </div>
             <p className="text-sm font-medium text-gray-600">All shipments in safe thermal range</p>
-            <p className="text-xs">No active excursion alerts requiring acknowledgment.</p>
+            <p className="text-xs text-gray-400">No active excursion alerts requiring acknowledgment.</p>
           </div>
         ) : (
           sortedAlerts.map((alert) => <AlertItem key={alert.id} alert={alert} />)

@@ -9,7 +9,7 @@ import { ShipmentMap } from '../components/map/ShipmentMap';
 import { AuditLog } from '../components/compliance/AuditLog';
 import { SkeletonLoader } from '../components/shared/SkeletonLoader';
 import { Shipment } from '../types';
-import { ArrowLeft, MapPin, User, Clock } from '@phosphor-icons/react';
+import { ArrowLeft, MapPin, User, Clock, MapTrifold } from '@phosphor-icons/react';
 import { formatRelativeTime } from '../utils/formatting';
 
 export const ShipmentDetail: React.FC = () => {
@@ -57,11 +57,11 @@ export const ShipmentDetail: React.FC = () => {
   if (!shipment) {
     return (
       <PageWrapper title="Shipment Not Found">
-        <div className="bg-white p-8 rounded-[8px] border text-center space-y-3">
+        <div className="bg-white p-8 rounded-xl border border-gray-200/60 text-center space-y-3">
           <p className="text-gray-600 font-medium">No shipment record found matching ID: {id}</p>
           <button
             onClick={() => navigate('/shipments')}
-            className="px-4 py-2 bg-[#1D6FA4] text-white rounded-[6px] text-xs font-medium"
+            className="px-4 py-2 bg-[#1D6FA4] text-white rounded-lg text-xs font-medium hover:bg-[#155883] transition-colors"
           >
             Back to Shipments Directory
           </button>
@@ -81,14 +81,14 @@ export const ShipmentDetail: React.FC = () => {
       {/* Back Button */}
       <button
         onClick={() => navigate('/shipments')}
-        className="flex items-center space-x-1 text-xs text-slate-600 hover:text-[#1D6FA4] transition-colors font-medium mb-2"
+        className="flex items-center space-x-1.5 text-xs text-slate-500 hover:text-[#1D6FA4] transition-colors font-medium mb-1 group"
       >
-        <ArrowLeft size={14} />
+        <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
         <span>Back to Shipments</span>
       </button>
 
-      {/* Section 1: Header Bar per PRD */}
-      <div className="bg-white border border-gray-200 rounded-[8px] p-5 shadow-card space-y-3">
+      {/* Section 1: Header Bar */}
+      <div className="bg-white border border-gray-200/60 rounded-xl p-5 shadow-card">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div className="flex items-center space-x-3">
             <span className="text-2xl font-bold font-mono text-[#1D6FA4]">{shipment.id}</span>
@@ -96,27 +96,27 @@ export const ShipmentDetail: React.FC = () => {
             <StatusPill status={shipment.status} />
           </div>
 
-          <div className="flex items-center space-x-4 text-xs text-gray-600 font-medium">
-            <div className="flex items-center space-x-1">
-              <MapPin size={16} className="text-gray-400" />
+          <div className="flex items-center space-x-4 text-[11px] text-gray-500 font-medium">
+            <div className="flex items-center space-x-1.5 bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-200/60">
+              <MapPin size={14} className="text-gray-400" />
               <span>{shipment.origin} → {shipment.destination}</span>
             </div>
 
-            <div className="flex items-center space-x-1">
-              <User size={16} className="text-gray-400" />
+            <div className="flex items-center space-x-1.5 bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-200/60">
+              <User size={14} className="text-gray-400" />
               <span>{shipment.operator_name}</span>
             </div>
 
-            <div className="flex items-center space-x-1">
-              <Clock size={16} className="text-gray-400" />
+            <div className="flex items-center space-x-1.5 bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-200/60">
+              <Clock size={14} className="text-gray-400" />
               <span>Started {formatRelativeTime(shipment.created_at)}</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Section 2: Two Columns (65/35 split) per PRD */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      {/* Section 2: Two Columns */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         <div className="lg:col-span-8">
           <TemperatureGraph
             readings={readings}
@@ -139,13 +139,18 @@ export const ShipmentDetail: React.FC = () => {
         </div>
       </div>
 
-      {/* Section 3: Map (300px height) per PRD */}
-      <div className="space-y-2">
-        <h3 className="text-sm font-bold text-gray-900 tracking-tight">Active Telemetry Route Trace</h3>
+      {/* Section 3: Route Map */}
+      <div className="space-y-3">
+        <div className="flex items-center space-x-2">
+          <div className="w-7 h-7 rounded-lg bg-[#1D6FA4]/10 flex items-center justify-center">
+            <MapTrifold size={16} weight="fill" className="text-[#1D6FA4]" />
+          </div>
+          <h3 className="text-sm font-bold text-gray-900 tracking-tight">Active Telemetry Route Trace</h3>
+        </div>
         <ShipmentMap shipments={[shipment]} selectedShipmentId={shipment.id} height="300px" />
       </div>
 
-      {/* Section 4: Audit Trail per PRD */}
+      {/* Section 4: Audit Trail */}
       <div>
         <AuditLog entries={auditEntries} />
       </div>

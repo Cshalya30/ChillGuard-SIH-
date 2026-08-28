@@ -24,7 +24,7 @@ const createCustomIcon = (status: string, isSelected: boolean) => {
   const size = isSelected ? 34 : 26;
 
   const html = `
-    <div class="${isBreach ? 'marker-breach-pulse' : ''}" style="width: ${size}px; height: ${size}px; background-color: ${color}; border: 2px solid white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
+    <div class="${isBreach ? 'marker-breach-pulse' : ''}" style="width: ${size}px; height: ${size}px; background-color: ${color}; border: 2.5px solid white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.25); transition: transform 0.2s;">
       <div style="width: ${size / 3.5}px; height: ${size / 3.5}px; background-color: white; border-radius: 50%;"></div>
     </div>
   `;
@@ -74,14 +74,14 @@ export const ShipmentMap: React.FC<ShipmentMapProps> = ({
     : [];
 
   return (
-    <div className="bg-white border border-gray-200 rounded-[8px] overflow-hidden shadow-card relative" style={{ height }}>
+    <div className="bg-white border border-gray-200/60 rounded-xl overflow-hidden shadow-card relative" style={{ height }}>
       <MapContainer
         center={center}
         zoom={7}
         scrollWheelZoom={true}
         style={{ height: '100%', width: '100%' }}
       >
-        {/* OpenStreetMap Tiles - No API key needed per PRD */}
+        {/* OpenStreetMap Tiles - Clean standard tile layer */}
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -93,7 +93,7 @@ export const ShipmentMap: React.FC<ShipmentMapProps> = ({
         {selectedRoutePolyline.length > 1 && (
           <Polyline
             positions={selectedRoutePolyline}
-            pathOptions={{ color: '#1D6FA4', weight: 4, opacity: 0.8, dashArray: '6, 6' }}
+            pathOptions={{ color: '#1D6FA4', weight: 3, opacity: 0.7, dashArray: '8, 6' }}
           />
         )}
 
@@ -112,17 +112,21 @@ export const ShipmentMap: React.FC<ShipmentMapProps> = ({
               }}
             >
               <Popup>
-                <div className="p-1 space-y-1 font-sans">
+                <div className="p-1 space-y-1.5 font-sans min-w-[160px]">
                   <div className="flex items-center justify-between space-x-3">
-                    <span className="font-mono font-bold text-xs text-[#1D6FA4]">{s.id}</span>
-                    <span className="text-[11px] font-mono bg-slate-800 text-slate-200 px-1.5 py-0.5 rounded">
-                      Risk {s.risk_score}/100
+                    <span className="font-mono font-bold text-xs text-[#4DA8DA]">{s.id}</span>
+                    <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-md ${
+                      s.risk_score >= 70 ? 'bg-red-500/20 text-red-300' : 
+                      s.risk_score >= 31 ? 'bg-amber-500/20 text-amber-300' : 
+                      'bg-emerald-500/20 text-emerald-300'
+                    }`}>
+                      Risk {s.risk_score}
                     </span>
                   </div>
                   <p className="font-semibold text-xs text-white">{s.product_name}</p>
-                  <div className="text-[11px] text-slate-300 font-mono flex justify-between pt-1 border-t border-slate-700">
+                  <div className="text-[10px] text-slate-400 font-mono flex justify-between pt-1.5 border-t border-white/10">
                     <span>Temp: {s.latest_temperature ?? s.setpoint_temp}°C</span>
-                    <span>
+                    <span className={s.time_to_breach_minutes ? 'text-red-400' : 'text-emerald-400'}>
                       {s.time_to_breach_minutes ? `Breach in ${s.time_to_breach_minutes}m` : 'Safe'}
                     </span>
                   </div>

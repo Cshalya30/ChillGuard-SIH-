@@ -43,36 +43,38 @@ export const ReportGenerator: React.FC<ReportGeneratorProps> = ({ shipmentId }) 
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-[8px] p-5 shadow-card space-y-4">
-      <div className="flex items-center justify-between border-b border-gray-200 pb-3">
+    <div className="bg-white border border-gray-200/60 rounded-xl p-5 shadow-card space-y-4">
+      <div className="flex items-center justify-between border-b border-gray-100 pb-3">
         <div className="flex items-center space-x-2">
-          <FilePdf size={20} className="text-[#1D6FA4]" />
+          <div className="w-7 h-7 rounded-lg bg-[#1D6FA4]/10 flex items-center justify-center">
+            <FilePdf size={16} weight="fill" className="text-[#1D6FA4]" />
+          </div>
           <h3 className="text-sm font-bold text-gray-900 tracking-tight">Automated Report Generator</h3>
         </div>
-        <span className="text-xs font-mono text-gray-500">FORMAT: PDF/A-1b</span>
+        <span className="text-[10px] font-mono text-gray-400">FORMAT: PDF/A-1b</span>
       </div>
 
       <div className="space-y-4">
         {!loading && !pdfBlobUrl && (
           <button
             onClick={handleGenerate}
-            className="w-full py-3 px-4 bg-[#1D6FA4] hover:bg-[#155883] text-white font-medium text-sm rounded-[6px] transition-colors flex items-center justify-center space-x-2 shadow-sm"
+            className="w-full py-3 px-4 bg-[#1D6FA4] hover:bg-[#155883] text-white font-medium text-xs rounded-lg transition-all duration-150 flex items-center justify-center space-x-2 shadow-sm active:scale-[0.99]"
           >
-            <FilePdf size={18} />
+            <FilePdf size={18} weight="fill" />
             <span>Generate GDP-Compliant Report</span>
           </button>
         )}
 
-        {/* Progress bar loader with text updates per PRD (no spinner) */}
+        {/* Progress bar loader */}
         {loading && (
-          <div className="space-y-2 p-4 bg-slate-50 border border-slate-200 rounded-[6px]">
+          <div className="space-y-2 p-4 bg-slate-50/80 border border-slate-200/60 rounded-lg">
             <div className="flex justify-between text-xs font-mono text-gray-700">
               <span>{statusText}</span>
-              <span>{progress}%</span>
+              <span className="font-bold">{progress}%</span>
             </div>
-            <div className="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+            <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
               <div
-                className="h-full bg-[#1D6FA4] transition-all duration-300 rounded-full"
+                className="h-full bg-[#1D6FA4] transition-all duration-300 rounded-full progress-bar-glow"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -81,14 +83,14 @@ export const ReportGenerator: React.FC<ReportGeneratorProps> = ({ shipmentId }) 
 
         {/* Generated PDF Actions */}
         {pdfBlobUrl && !loading && (
-          <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-[6px] space-y-3">
+          <div className="p-4 bg-emerald-50/80 border border-emerald-200/60 rounded-lg space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-emerald-800 font-mono">
+              <span className="text-[11px] font-bold text-emerald-800 font-mono">
                 DOCUMENT READY: chillguard-gdp-report-{shipmentId}.pdf
               </span>
               <button
                 onClick={handleGenerate}
-                className="text-xs text-slate-500 hover:text-slate-800 underline"
+                className="text-[11px] text-slate-500 hover:text-slate-800 underline"
               >
                 Regenerate
               </button>
@@ -99,7 +101,7 @@ export const ReportGenerator: React.FC<ReportGeneratorProps> = ({ shipmentId }) 
                 href={pdfBlobUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="flex-1 py-2 px-3 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-medium rounded-[6px] flex items-center justify-center space-x-1.5 transition-colors"
+                className="flex-1 py-2 px-3 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-medium rounded-lg flex items-center justify-center space-x-1.5 transition-colors shadow-sm"
               >
                 <ArrowSquareOut size={16} />
                 <span>Open PDF in New Tab</span>
@@ -108,7 +110,7 @@ export const ReportGenerator: React.FC<ReportGeneratorProps> = ({ shipmentId }) 
               <a
                 href={pdfBlobUrl}
                 download={`chillguard-gdp-report-${shipmentId}.pdf`}
-                className="flex-1 py-2 px-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium rounded-[6px] flex items-center justify-center space-x-1.5 transition-colors"
+                className="flex-1 py-2 px-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium rounded-lg flex items-center justify-center space-x-1.5 transition-colors shadow-sm"
               >
                 <DownloadSimple size={16} />
                 <span>Download Report</span>

@@ -8,21 +8,27 @@ interface TopBarProps {
 
 export const TopBar: React.FC<TopBarProps> = ({ title, subtitle }) => {
   return (
-    <header className="h-16 bg-white border-b border-gray-200 px-6 flex items-center justify-between sticky top-0 z-20 shadow-sm">
+    <header className="h-16 bg-white border-b border-gray-200/80 px-6 flex items-center justify-between sticky top-0 z-20">
       <div>
-        <h1 className="text-xl font-bold text-gray-900 font-sans tracking-tight">{title}</h1>
-        {subtitle && <p className="text-xs text-gray-500 font-normal">{subtitle}</p>}
+        <h1 className="text-lg font-bold text-gray-900 font-sans tracking-tight leading-tight">{title}</h1>
+        {subtitle && (
+          <p className="text-[11px] text-gray-400 font-normal leading-tight mt-0.5">{subtitle}</p>
+        )}
       </div>
 
-      <div className="flex items-center space-x-4">
-        {/* System Status Indicator */}
-        <div className="flex items-center space-x-2 bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-[4px] border border-emerald-200 text-xs font-medium">
-          <Pulse size={14} className="animate-spin text-emerald-600" />
-          <span className="font-mono">STREAMING LIVE</span>
+      <div className="flex items-center space-x-3">
+        {/* Live Streaming Status */}
+        <div className="flex items-center space-x-2 bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-lg border border-emerald-200/60 text-[11px] font-medium">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+          </span>
+          <span className="font-mono font-semibold tracking-wide">STREAMING LIVE</span>
         </div>
 
-        <div className="flex items-center space-x-2 bg-slate-100 text-slate-700 px-2.5 py-1 rounded-[4px] text-xs font-mono">
-          <ShieldCheck size={14} className="text-[#1D6FA4]" />
+        {/* GDP Validated Badge */}
+        <div className="flex items-center space-x-1.5 bg-slate-50 text-slate-600 px-3 py-1.5 rounded-lg border border-slate-200/60 text-[11px] font-mono font-medium">
+          <ShieldCheck size={14} weight="fill" className="text-[#1D6FA4]" />
           <span>GDP VALIDATED</span>
         </div>
       </div>

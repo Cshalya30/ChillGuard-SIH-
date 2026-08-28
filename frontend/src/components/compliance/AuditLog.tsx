@@ -22,13 +22,18 @@ interface AuditLogProps {
 
 export const AuditLog: React.FC<AuditLogProps> = ({ entries }) => {
   return (
-    <div className="bg-white border border-gray-200 rounded-[8px] p-4 shadow-card space-y-4">
-      <div className="flex items-center justify-between border-b border-gray-200 pb-3">
-        <h3 className="text-sm font-bold text-gray-900 tracking-tight">Audit Trail & Chain of Custody</h3>
-        <span className="text-xs font-mono text-gray-500">{entries.length} Audit Records</span>
+    <div className="bg-white border border-gray-200/60 rounded-xl p-5 shadow-card space-y-4">
+      <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+        <div className="flex items-center space-x-2">
+          <div className="w-7 h-7 rounded-lg bg-[#1D6FA4]/10 flex items-center justify-center">
+            <ShieldCheck size={16} weight="fill" className="text-[#1D6FA4]" />
+          </div>
+          <h3 className="text-sm font-bold text-gray-900 tracking-tight">Audit Trail & Chain of Custody</h3>
+        </div>
+        <span className="text-[11px] font-mono text-gray-400">{entries.length} Audit Records</span>
       </div>
 
-      <div className="space-y-3 font-sans">
+      <div className="space-y-2.5 font-sans">
         {entries.length === 0 ? (
           <p className="text-xs text-gray-400 italic py-4 text-center">No audit trail entries recorded yet.</p>
         ) : (
@@ -48,21 +53,23 @@ export const AuditLog: React.FC<AuditLogProps> = ({ entries }) => {
             }
 
             return (
-              <div key={idx} className="flex items-start space-x-3 text-xs p-2.5 rounded-[6px] bg-slate-50 border border-slate-200">
-                <div className={`p-1.5 rounded-[4px] ${iconColor}`}>
-                  <Icon size={16} />
+              <div key={idx} className="flex items-start space-x-3 text-xs p-3 rounded-lg bg-slate-50/80 border border-slate-200/60 transition-colors hover:bg-slate-100/60">
+                <div className={`p-2 rounded-md ${iconColor} flex-shrink-0`}>
+                  <Icon size={16} weight="fill" />
                 </div>
-                <div className="flex-1 space-y-0.5">
+                <div className="flex-1 space-y-0.5 min-w-0">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-gray-900 capitalize">
                       {entry.entry_type === 'custody' ? entry.action : (entry.message || 'Telemetry Event')}
                     </span>
-                    <span className="text-gray-400 font-mono text-[11px]">
+                    <span className="text-gray-400 font-mono text-[10px]">
                       {formatRelativeTime(entry.timestamp)}
                     </span>
                   </div>
                   {entry.operator_name && (
-                    <p className="text-gray-600 font-medium">Operator: {entry.operator_name} (Handoff Temp: {entry.temperature_at_handoff}°C)</p>
+                    <p className="text-gray-600 font-medium text-[11px]">
+                      Operator: {entry.operator_name} (Handoff Temp: {entry.temperature_at_handoff}°C)
+                    </p>
                   )}
                 </div>
               </div>

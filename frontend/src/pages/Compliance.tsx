@@ -5,7 +5,7 @@ import { MKTDisplay } from '../components/compliance/MKTDisplay';
 import { ReportGenerator } from '../components/compliance/ReportGenerator';
 import { SkeletonLoader } from '../components/shared/SkeletonLoader';
 import { Shipment, CustodyLogEntry } from '../types';
-import { CheckCircle, Warning, User, Clock, Thermometer } from '@phosphor-icons/react';
+import { User, Clock, Thermometer, UserCheck } from '@phosphor-icons/react';
 import { formatRelativeTime } from '../utils/formatting';
 
 export const Compliance: React.FC = () => {
@@ -71,20 +71,20 @@ export const Compliance: React.FC = () => {
       title="GDP Compliance & Audit Verification"
       subtitle="Mean Kinetic Temperature (MKT) verification, Chain of Custody logging & automated audit reports"
     >
-      {/* Section 1: Shipment Selector Dropdown per PRD */}
-      <div className="bg-white border border-gray-200 rounded-[8px] p-4 shadow-card flex flex-col md:flex-row items-center justify-between gap-4">
+      {/* Section 1: Shipment Selector Dropdown */}
+      <div className="bg-white border border-gray-200/60 rounded-xl p-4 shadow-card flex flex-col md:flex-row items-center justify-between gap-4">
         <div>
-          <label htmlFor="shipment-selector" className="text-xs font-bold text-gray-700 uppercase tracking-wide">
+          <label htmlFor="shipment-selector" className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">
             Select Target Shipment Profile for Compliance Audit:
           </label>
-          <p className="text-xs text-gray-500">Choose completed or active shipment (Demo Tip: Select SH-2047 for completed audit)</p>
+          <p className="text-xs text-gray-500 mt-0.5">Choose completed or active shipment (Demo Tip: Select SH-2047 for completed audit)</p>
         </div>
 
         <select
           id="shipment-selector"
           value={selectedShipmentId}
           onChange={(e) => setSelectedShipmentId(e.target.value)}
-          className="w-full md:w-80 bg-slate-50 border border-gray-300 rounded-[6px] px-3 py-2 text-xs font-mono font-bold text-[#1D6FA4] focus:outline-none focus:border-[#1D6FA4]"
+          className="w-full md:w-80 bg-slate-50 border border-gray-200/80 rounded-lg px-3 py-2 text-xs font-mono font-bold text-[#1D6FA4] focus:outline-none focus:border-[#1D6FA4] transition-all"
         >
           {shipments.map((s) => (
             <option key={s.id} value={s.id}>
@@ -98,7 +98,7 @@ export const Compliance: React.FC = () => {
         <SkeletonLoader count={3} height="h-32" />
       ) : selectedShipment ? (
         <>
-          {/* Section 2: MKT Display per PRD */}
+          {/* Section 2: MKT Display */}
           <MKTDisplay
             mktValue={mktVal}
             minTemp={selectedShipment.min_temp}
@@ -106,17 +106,19 @@ export const Compliance: React.FC = () => {
             readingsCount={readingsCount}
           />
 
-          {/* Section 3: Vertical Custody Log Timeline (NOT a table) per PRD */}
-          <div className="bg-white border border-gray-200 rounded-[8px] p-5 shadow-card space-y-4">
-            <div className="flex items-center justify-between border-b border-gray-200 pb-3">
+          {/* Section 3: Vertical Custody Log Timeline */}
+          <div className="bg-white border border-gray-200/60 rounded-xl p-5 shadow-card space-y-4">
+            <div className="flex items-center justify-between border-b border-gray-100 pb-3">
               <div className="flex items-center space-x-2">
-                <User size={20} className="text-[#1D6FA4]" />
+                <div className="w-7 h-7 rounded-lg bg-[#1D6FA4]/10 flex items-center justify-center">
+                  <UserCheck size={16} weight="fill" className="text-[#1D6FA4]" />
+                </div>
                 <h3 className="text-sm font-bold text-gray-900 tracking-tight">Chain of Custody Handover Timeline</h3>
               </div>
-              <span className="text-xs font-mono text-gray-500">VERTICAL AUDIT NODES</span>
+              <span className="text-[10px] font-mono text-gray-400">VERTICAL AUDIT NODES</span>
             </div>
 
-            <div className="relative pl-6 space-y-6 before:absolute before:left-3 before:top-2 before:bottom-2 before:w-[2px] before:bg-gray-200">
+            <div className="relative pl-6 space-y-5 before:absolute before:left-3 before:top-2 before:bottom-2 before:w-[2px] before:bg-gray-100">
               {custodyLogs.length === 0 ? (
                 <div className="text-xs text-gray-400 italic py-2">No custody handover events registered for this shipment.</div>
               ) : (
@@ -127,24 +129,24 @@ export const Compliance: React.FC = () => {
 
                   return (
                     <div key={idx} className="relative group">
-                      {/* Timeline Node Color-coded per PRD */}
+                      {/* Timeline Node */}
                       <div
                         className={`absolute -left-[19px] top-1 w-3.5 h-3.5 rounded-full border-2 border-white ${
-                          isInRange ? 'bg-emerald-600 ring-2 ring-emerald-100' : 'bg-red-600 ring-2 ring-red-100'
+                          isInRange ? 'bg-emerald-500 ring-4 ring-emerald-500/15' : 'bg-red-500 ring-4 ring-red-500/15'
                         }`}
                       />
 
-                      <div className="bg-slate-50 border border-slate-200 rounded-[6px] p-3.5 space-y-1">
+                      <div className="bg-slate-50/80 border border-slate-200/60 rounded-lg p-3.5 space-y-1.5">
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-bold text-gray-900">{log.action}</span>
-                          <span className="text-[11px] text-gray-400 font-mono flex items-center space-x-1">
+                          <span className="text-[10px] text-gray-400 font-mono flex items-center space-x-1">
                             <Clock size={12} />
                             <span>{formatRelativeTime(log.timestamp)}</span>
                           </span>
                         </div>
 
                         <p className="text-xs text-gray-600">
-                          <span className="font-semibold">Operator:</span> {log.operator_name}
+                          <span className="font-semibold text-gray-500">Operator:</span> {log.operator_name}
                         </p>
 
                         <div className="flex items-center space-x-3 pt-1 text-xs font-mono">
@@ -154,15 +156,15 @@ export const Compliance: React.FC = () => {
                           </span>
 
                           <span
-                            className={`px-2 py-0.5 rounded-[4px] text-[11px] font-bold ${
-                              isInRange ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
+                            className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
+                              isInRange ? 'bg-emerald-100/80 text-emerald-800' : 'bg-red-100/80 text-red-800'
                             }`}
                           >
                             {isInRange ? 'SAFE AT HANDOFF' : 'EXCURSION AT HANDOFF'}
                           </span>
                         </div>
 
-                        {log.notes && <p className="text-xs text-gray-500 italic pt-1">"{log.notes}"</p>}
+                        {log.notes && <p className="text-xs text-gray-500 italic pt-0.5">"{log.notes}"</p>}
                       </div>
                     </div>
                   );
@@ -171,7 +173,7 @@ export const Compliance: React.FC = () => {
             </div>
           </div>
 
-          {/* Section 4: Report Generation per PRD */}
+          {/* Section 4: Report Generation */}
           <ReportGenerator shipmentId={selectedShipment.id} />
         </>
       ) : null}

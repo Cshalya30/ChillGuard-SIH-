@@ -52,10 +52,10 @@ export const Dashboard: React.FC = () => {
       title="Operational Intelligence Dashboard"
       subtitle="Real-time telemetry, predictive risk modeling & cold-chain compliance monitoring"
     >
-      {/* Row 1: Four Equal-Width Metric Cards per PRD */}
+      {/* Row 1: Metric Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {loading ? (
-          <SkeletonLoader count={4} height="h-24" />
+          <SkeletonLoader count={4} height="h-28" />
         ) : (
           <>
             <MetricCard
@@ -63,31 +63,35 @@ export const Dashboard: React.FC = () => {
               value={activeCount}
               subtitle={`${shipments.length} total monitored profiles`}
               topStripColor="blue"
+              animationDelay={0}
             />
             <MetricCard
               label="At-Risk Shipments"
               value={atRiskCount}
               subtitle="Moderate temperature volatility"
               topStripColor="amber"
+              animationDelay={60}
             />
             <MetricCard
               label="Breach Events Today"
               value={breachCount}
               subtitle="Requires immediate intervention"
               topStripColor="red"
+              animationDelay={120}
             />
             <MetricCard
               label="Unacknowledged Alerts"
               value={unacknowledgedAlerts.length}
               subtitle={`Oldest alert age: ${oldestAlertAge}`}
               topStripColor={unacknowledgedAlerts.length > 0 ? 'red' : 'slate'}
+              animationDelay={180}
             />
           </>
         )}
       </div>
 
-      {/* Row 2: 60/40 Split Leaflet ShipmentMap & AlertPanel per PRD */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      {/* Row 2: 60/40 Map & Alerts */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         <div className="lg:col-span-7">
           {loading ? (
             <SkeletonLoader height="h-[480px]" />
@@ -105,7 +109,7 @@ export const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Row 3: Sortable ShipmentTable per PRD */}
+      {/* Row 3: Shipment Table */}
       <div>
         {loading ? (
           <SkeletonLoader height="h-64" />

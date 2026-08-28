@@ -9,12 +9,13 @@ interface StatusPillProps {
 export const StatusPill: React.FC<StatusPillProps> = ({ status, className = '' }) => {
   const colors = getStatusColor(status);
   const formatted = status.toUpperCase().replace('_', ' ');
+  const isBreach = status === 'breach';
 
   return (
     <span
-      className={`inline-flex items-center px-2 py-0.5 rounded-[4px] text-xs font-mono font-medium border ${colors.bg} ${colors.text} ${colors.border} ${className}`}
+      className={`inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-mono font-semibold border ${colors.bg} ${colors.text} ${colors.border} ${className}`}
     >
-      <span className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-80" />
+      <span className={`w-1.5 h-1.5 rounded-full bg-current mr-1.5 ${isBreach ? 'animate-pulse' : 'opacity-70'}`} />
       {formatted}
     </span>
   );

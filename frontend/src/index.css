@@ -7,17 +7,39 @@
     background-color: #F0F2F5;
     color: #111827;
     font-family: 'DM Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Premium custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8;
+  }
+
+  /* Selection highlight to brand color */
+  ::selection {
+    background-color: #1D6FA4;
+    color: white;
   }
 }
 
-/* Skeleton loader shimmer animation sweep */
+/* ═══════════════════════════════════════════════
+   SKELETON LOADER SHIMMER
+   ═══════════════════════════════════════════════ */
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .skeleton-shimmer {
@@ -26,17 +48,13 @@
   animation: shimmer 1.5s infinite linear;
 }
 
-/* Breach map marker CSS pulse animation */
+/* ═══════════════════════════════════════════════
+   BREACH MAP MARKER PULSE
+   ═══════════════════════════════════════════════ */
 @keyframes breach-pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
-  }
-  70% {
-    box-shadow: 0 0 0 12px rgba(220, 38, 38, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
-  }
+  0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
+  70% { box-shadow: 0 0 0 12px rgba(220, 38, 38, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
 }
 
 .marker-breach-pulse {
@@ -44,15 +62,122 @@
   animation: breach-pulse 1.8s infinite;
 }
 
-/* Custom leaflet map popup styling */
+/* ═══════════════════════════════════════════════
+   LIVE PULSE DOT ANIMATION
+   ═══════════════════════════════════════════════ */
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.75); }
+}
+
+.live-dot {
+  animation: live-pulse 2s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════
+   RISK SCORE BAR ANIMATION
+   ═══════════════════════════════════════════════ */
+@keyframes risk-bar-fill {
+  from { width: 0; }
+}
+
+.risk-bar-animated {
+  animation: risk-bar-fill 0.8s ease-out forwards;
+}
+
+/* ═══════════════════════════════════════════════
+   METRIC CARD ENTRANCE
+   ═══════════════════════════════════════════════ */
+@keyframes slide-up-fade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up-fade 0.4s ease-out both;
+}
+
+.animate-slide-up-delay-1 { animation-delay: 0.06s; }
+.animate-slide-up-delay-2 { animation-delay: 0.12s; }
+.animate-slide-up-delay-3 { animation-delay: 0.18s; }
+
+/* ═══════════════════════════════════════════════
+   PROGRESS BAR ANIMATION
+   ═══════════════════════════════════════════════ */
+@keyframes progress-glow {
+  0%, 100% { box-shadow: 0 0 4px rgba(29, 111, 164, 0.4); }
+  50% { box-shadow: 0 0 12px rgba(29, 111, 164, 0.7); }
+}
+
+.progress-bar-glow {
+  animation: progress-glow 1.5s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════
+   CUSTOM LEAFLET MAP POPUP STYLING
+   ═══════════════════════════════════════════════ */
 .leaflet-popup-content-wrapper {
   background: #0D1B2A !important;
   color: #FFFFFF !important;
   border-radius: 8px !important;
   padding: 4px !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
 }
 
 .leaflet-popup-tip {
   background: #0D1B2A !important;
+}
+
+.leaflet-popup-content {
+  margin: 8px 10px !important;
+}
+
+/* ═══════════════════════════════════════════════
+   TABLE ROW HOVER HIGHLIGHT
+   ═══════════════════════════════════════════════ */
+.table-row-hover {
+  position: relative;
+  transition: all 0.15s ease;
+}
+
+.table-row-hover:hover {
+  background-color: #F8FAFC;
+  box-shadow: inset 3px 0 0 0 #1D6FA4;
+}
+
+/* ═══════════════════════════════════════════════
+   SIDEBAR NAV ITEM ACTIVE INDICATOR
+   ═══════════════════════════════════════════════ */
+.nav-item-active {
+  position: relative;
+}
+
+.nav-item-active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background: white;
+}
+
+/* ═══════════════════════════════════════════════
+   CARD HOVER LIFT EFFECT
+   ═══════════════════════════════════════════════ */
+.card-interactive {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.10), 0 1px 3px rgba(0,0,0,0.06);
 }

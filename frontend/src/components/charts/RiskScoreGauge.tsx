@@ -1,5 +1,5 @@
 import React from 'react';
-import { Warning, Timer, Thermometer, Drop, ShieldAlert } from '@phosphor-icons/react';
+import { Timer, Thermometer, Drop, Brain } from '@phosphor-icons/react';
 import { formatRelativeTime } from '../../utils/formatting';
 
 interface RiskScoreGaugeProps {
@@ -21,76 +21,136 @@ export const RiskScoreGauge: React.FC<RiskScoreGaugeProps> = ({
   lastReadingTime,
   setpointTemp
 }) => {
-  const getRiskColor = (score: number) => {
-    if (score >= 70) return { text: 'text-red-600', bg: 'bg-red-50', border: 'border-red-200', badge: 'bg-red-600' };
-    if (score >= 31) return { text: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-200', badge: 'bg-amber-600' };
-    return { text: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-200', badge: 'bg-emerald-600' };
+  const getRiskConfig = (score: number) => {
+    if (score >= 70) return { 
+      text: 'text-red-600', 
+      bg: 'bg-red-50', 
+      border: 'border-red-200/60',
+      badge: 'bg-red-600',
+      ring: 'ring-red-500',
+      label: 'CRITICAL',
+      gradient: 'from-red-500 to-red-400'
+    };
+    if (score >= 31) return { 
+      text: 'text-amber-600', 
+      bg: 'bg-amber-50', 
+      border: 'border-amber-200/60',
+      badge: 'bg-amber-600',
+      ring: 'ring-amber-500',
+      label: 'ELEVATED',
+      gradient: 'from-amber-500 to-amber-400'
+    };
+    return { 
+      text: 'text-emerald-600', 
+      bg: 'bg-emerald-50', 
+      border: 'border-emerald-200/60',
+      badge: 'bg-emerald-600',
+      ring: 'ring-emerald-500',
+      label: 'NOMINAL',
+      gradient: 'from-emerald-500 to-emerald-400'
+    };
   };
 
-  const riskStyle = getRiskColor(riskScore);
+  const riskConfig = getRiskConfig(riskScore);
+
+  // SVG semi-circular gauge
+  const radius = 60;
+  const circumference = Math.PI * radius;
+  const fillPercentage = riskScore / 100;
+  const strokeDashoffset = circumference * (1 - fillPercentage);
 
   return (
-    <div className="bg-white border border-gray-200 rounded-[8px] p-5 shadow-card space-y-5">
-      <div className="flex items-center justify-between border-b border-gray-200 pb-3">
-        <h3 className="text-sm font-bold text-gray-900 tracking-tight">Risk Intelligence Engine</h3>
-        <span className={`text-xs font-mono font-bold text-white px-2 py-0.5 rounded-[4px] ${riskStyle.badge}`}>
+    <div className="bg-white border border-gray-200/60 rounded-xl p-5 shadow-card space-y-4">
+      <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+        <div className="flex items-center space-x-2">
+          <div className="w-7 h-7 rounded-lg bg-[#1D6FA4]/10 flex items-center justify-center">
+            <Brain size={16} weight="fill" className="text-[#1D6FA4]" />
+          </div>
+          <h3 className="text-sm font-bold text-gray-900 tracking-tight">Risk Intelligence Engine</h3>
+        </div>
+        <span className={`text-[10px] font-mono font-bold text-white px-2.5 py-1 rounded-md ${riskConfig.badge}`}>
           ML MODEL ACTIVE
         </span>
       </div>
 
-      {/* Main Risk Score Meter */}
-      <div className={`p-4 rounded-[8px] border ${riskStyle.bg} ${riskStyle.border} flex items-center justify-between`}>
-        <div>
-          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Breach Excursion Risk</p>
-          <div className="flex items-baseline space-x-1 mt-1">
-            <span className={`text-4xl font-bold font-mono ${riskStyle.text}`}>{riskScore}</span>
-            <span className="text-sm text-gray-500 font-mono">/ 100</span>
-          </div>
-        </div>
-
-        {timeToBreachMinutes !== null && timeToBreachMinutes !== undefined && (
-          <div className="text-right bg-white p-2.5 rounded-[6px] border border-gray-200 shadow-sm">
-            <div className="flex items-center space-x-1 text-xs text-red-600 font-medium">
-              <Timer size={14} className="animate-pulse" />
-              <span>TIME TO BREACH</span>
-            </div>
-            <p className="text-lg font-bold font-mono text-red-700 mt-0.5">
-              {timeToBreachMinutes} <span className="text-xs font-normal">MIN</span>
-            </p>
-          </div>
-        )}
+      {/* Semi-circular Gauge */}
+      <div className="flex flex-col items-center pt-2">
+        <svg width="160" height="90" viewBox="0 0 160 90" className="overflow-visible">
+          {/* Background arc */}
+          <path
+            d="M 10 80 A 60 60 0 0 1 150 80"
+            fill="none"
+            stroke="#F1F5F9"
+            strokeWidth="10"
+            strokeLinecap="round"
+          />
+          {/* Filled arc */}
+          <path
+            d="M 10 80 A 60 60 0 0 1 150 80"
+            fill="none"
+            stroke={riskScore >= 70 ? '#EF4444' : riskScore >= 31 ? '#F59E0B' : '#22C55E'}
+            strokeWidth="10"
+            strokeLinecap="round"
+            strokeDasharray={`${circumference}`}
+            strokeDashoffset={strokeDashoffset}
+            className="transition-all duration-1000 ease-out"
+          />
+          {/* Center text */}
+          <text x="80" y="72" textAnchor="middle" className="font-mono font-bold" fontSize="32" fill={riskScore >= 70 ? '#DC2626' : riskScore >= 31 ? '#D97706' : '#16A34A'}>
+            {riskScore}
+          </text>
+          <text x="80" y="88" textAnchor="middle" className="font-mono" fontSize="11" fill="#94A3B8">
+            / 100
+          </text>
+        </svg>
+        <span className={`text-[10px] font-mono font-bold tracking-wider mt-1 px-3 py-0.5 rounded-md ${riskConfig.bg} ${riskConfig.text} border ${riskConfig.border}`}>
+          {riskConfig.label} RISK
+        </span>
       </div>
 
+      {/* Time to Breach */}
+      {timeToBreachMinutes !== null && timeToBreachMinutes !== undefined && (
+        <div className="bg-red-50 border border-red-200/60 rounded-lg p-3 flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <Timer size={16} weight="fill" className="text-red-500 animate-pulse" />
+            <span className="text-[11px] text-red-700 font-semibold uppercase tracking-wide">Time to Breach</span>
+          </div>
+          <span className="text-xl font-bold font-mono text-red-600">
+            {timeToBreachMinutes} <span className="text-xs font-medium text-red-400">MIN</span>
+          </span>
+        </div>
+      )}
+
       {/* Live Telemetry Grid */}
-      <div className="grid grid-cols-2 gap-3 pt-1">
-        <div className="p-3 bg-slate-50 border border-slate-200 rounded-[6px]">
-          <div className="flex items-center space-x-1.5 text-xs text-slate-500 font-medium">
-            <Thermometer size={14} className="text-[#1D6FA4]" />
+      <div className="grid grid-cols-2 gap-3">
+        <div className="p-3 bg-slate-50/80 border border-slate-200/60 rounded-lg">
+          <div className="flex items-center space-x-1.5 text-[10px] text-slate-400 font-semibold uppercase tracking-wide">
+            <Thermometer size={12} className="text-[#1D6FA4]" />
             <span>Current Temp</span>
           </div>
-          <p className="text-2xl font-bold font-mono text-gray-900 mt-1">{currentTemp}°C</p>
-          <p className="text-[11px] text-slate-400 mt-0.5 font-mono">Setpoint: {setpointTemp}°C</p>
+          <p className="text-xl font-bold font-mono text-gray-900 mt-1.5">{currentTemp}°C</p>
+          <p className="text-[10px] text-slate-400 mt-0.5 font-mono">Setpoint: {setpointTemp}°C</p>
         </div>
 
-        <div className="p-3 bg-slate-50 border border-slate-200 rounded-[6px]">
-          <div className="flex items-center space-x-1.5 text-xs text-slate-500 font-medium">
-            <Drop size={14} className="text-blue-500" />
+        <div className="p-3 bg-slate-50/80 border border-slate-200/60 rounded-lg">
+          <div className="flex items-center space-x-1.5 text-[10px] text-slate-400 font-semibold uppercase tracking-wide">
+            <Drop size={12} className="text-blue-500" />
             <span>Humidity</span>
           </div>
-          <p className="text-2xl font-bold font-mono text-gray-900 mt-1">{humidity}%</p>
-          <p className="text-[11px] text-slate-400 mt-0.5 font-mono">Relative Enclosure</p>
+          <p className="text-xl font-bold font-mono text-gray-900 mt-1.5">{humidity}%</p>
+          <p className="text-[10px] text-slate-400 mt-0.5 font-mono">Relative Enclosure</p>
         </div>
       </div>
 
       {/* MKT & Timestamp */}
-      <div className="pt-2 border-t border-gray-200 flex items-center justify-between text-xs font-mono text-gray-500">
+      <div className="pt-3 border-t border-gray-100 flex items-center justify-between text-[11px] font-mono text-gray-400">
         <div>
           <span>MKT (Arrhenius): </span>
-          <span className="font-bold text-gray-900">{mktValue !== undefined && mktValue !== null ? `${mktValue}°C` : 'Calculating...'}</span>
+          <span className="font-bold text-gray-800">{mktValue !== undefined && mktValue !== null ? `${mktValue}°C` : 'Calculating...'}</span>
         </div>
         <div>
           <span>Updated: </span>
-          <span className="text-gray-700">{formatRelativeTime(lastReadingTime || '')}</span>
+          <span className="text-gray-600">{formatRelativeTime(lastReadingTime || '')}</span>
         </div>
       </div>
     </div>
